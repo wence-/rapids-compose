@@ -1326,6 +1326,8 @@ If:
   PathMatch: .*\.cuh?$
 CompileFlags:
   Compiler: $CUDA_HOME/bin/nvcc
+  Add:
+    - --cuda-path=$CUDA_HOME
 
 ---
 

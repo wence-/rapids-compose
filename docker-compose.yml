@@ -3,6 +3,7 @@ version: "3.8"
 x-service-settings: &service_settings
   env_file: .env
   network_mode: host
+  pid: host
   build: &build_settings
     context: ..
     args:
@@ -31,6 +32,7 @@ x-service-settings: &service_settings
   cap_add:
     - SYS_ADMIN
     - SYS_PTRACE
+  shm_size: '8gb'
   security_opt:
     - apparmor=unconfined
     - seccomp=${COMPOSE_HOME:-$PWD/compose}/etc/settings/docker-seccomp-with-perf.json
@@ -73,6 +75,9 @@ services:
       - &usr_share_fonts "/usr/share/fonts:/usr/share/fonts:ro"
       - &dbus_system_bus_socket "/run/dbus/system_bus_socket:/run/dbus/system_bus_socket"
       - &xdg_runtime_dir "${XDG_RUNTIME_DIR:-/run/user/$_UID}:${XDG_RUNTIME_DIR:-/run/user/$_UID}"
+      - &first_party "${RAPIDS_HOME:-$PWD}/first-party:${RAPIDS_HOME:-$PWD}/first-party"
+      - &third_party "${RAPIDS_HOME:-$PWD}/third-party:${RAPIDS_HOME:-$PWD}/third-party"
+      - &doodles "${HOME}/Documents/src/doodles:${RAPIDS_HOME:-$PWD}/doodles"
 
   notebooks:
     <<: *service_settings
@@ -102,6 +107,9 @@ services:
       - *x11_socket
       - *usr_share_fonts
       - *xdg_runtime_dir
+      - *first_party
+      - *third_party
+      - *doodles
       - *dbus_system_bus_socket
       - &jupyter "${COMPOSE_HOME:-$PWD/compose}/etc/notebooks/.jupyter:${RAPIDS_HOME:-$PWD}/.jupyter"
       - &notebooks_contrib "${RAPIDS_HOME:-$PWD}/notebooks-contrib:${RAPIDS_HOME:-$PWD}/notebooks/contrib"

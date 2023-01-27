@@ -61,6 +61,7 @@ fi' \
     libxrender1 \
     libnuma1 \
     libnuma-dev \
+    bash-completion \
  && bash -c '\
 if [[ "$USE_FISH_SHELL" == "YES" ]]; then \
     apt install --no-install-recommends -y fish; \
@@ -168,6 +169,6 @@ ENV FRESH_CONDA_ENV=$FRESH_CONDA_ENV
 
 WORKDIR "$RAPIDS_HOME"
 
-ENTRYPOINT ["/usr/bin/tini", "--", "fixuid", "-q", "/entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/tini", "-s", "--", "fixuid", "-q", "/entrypoint.sh"]
 
 CMD ["bash"]
